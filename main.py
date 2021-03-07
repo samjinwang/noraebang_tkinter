@@ -10,12 +10,13 @@ from PIL import Image, ImageTk
 # from moviepy.video.fx.resize import resize
 # import pygame
 
+urlList = []
 
 ################################
 # Call methods from buttonMethod
 ################################
-def uT():
-    bm.urlType(urlEntry,musicList)
+# def uT():
+#     bm.urlType(urlEntry,musicList)
 
 
 ################################
@@ -35,6 +36,9 @@ arial19 = font.Font(family ="Arial", size = 19)
 urlEntry = Entry(win,font = arial19, bd = 2)
 urlEntry.pack()
 urlEntry.place(x=800,y=40)
+
+
+
 
 
 videoLabel = Label(win)
@@ -65,12 +69,22 @@ musicList.place(x=800, y = 170)
 
 ########### buttons ############
 
+def urlType():
+    url = urlEntry.get()  # a is the thing typed in the entry
+    youtube = pytube.YouTube(url)
+    video = youtube.streams.first()
+    video.download()
+    name = youtube.streams[0].title
+    musicList.insert(END,name +"\n")
+
 #예약
 reserve = Button(win, text='예약', font = fixedSys25)  # construct a button
 reserve.pack()  # put a button on the window
 reserve.place(x=800, y=90)
 reserve.config(width=8, height=1)  # button size
-reserve.config(command= uT)  # execute the function of reserve
+reserve.config(command= urlType)  # execute the function of reserve
+
+
 
 #우선예약
 reserveAhead = Button(win, text='우선예약', font = fixedSys25)  # construct a button
@@ -85,21 +99,32 @@ start = Button(win,font = fixedSys25, text='시작')  # construct a button
 start.pack()  # put a button on the window
 start.place(x=800, y=600)
 start.config(width=8, height=1)  # button size
-#reserve.config(command=urlType)  # execute the function of button # # # video = imageio.get_reader(video_name)
-    # # delay = int(1000 / video.get_meta_data()['fps'])
-    # #
-    # # def stream(label):
-    # #     try:
-    # #         image = video.get_next_data()
-    # #     except:
-    # #         video.close()
-    # #         return
-    # #     label.after(delay, lambda: stream(label))
-    # #     frame_image = ImageTk.PhotoImage(Image.fromarray(image))
-    # #     label.config(image=frame_image)
-    # #     label.image = frame_image
-    # #
-    # # videoLabel.after(delay,lambda: stream(videoLabel) )
+#reserve.config(command=startVideo)  # execute the function of button # # # video = imageio.get_reader(video_name)
+
+# def startVideo(label):
+#
+#     for image in video.iter_data():
+#         frame_image = ImageTk.PhotoImage(Image.fromarray(image))
+#         label.config(image=frame_image)
+#         label.image = frame_image
+#         time.sleep(0.025)
+
+
+
+# delay = int(1000 / video.get_meta_data()['fps'])
+#
+# def stream(label):
+#     try:
+#         image = video.get_next_data()
+#     except:
+#         video.close()
+#         return
+#     label.after(delay, lambda: stream(label))
+#     frame_image = ImageTk.PhotoImage(Image.fromarray(image))
+#     label.config(image=frame_image)
+#     label.image = frame_image
+#
+# videoLabel.after(delay,lambda: stream(videoLabel) )
 
 
 
@@ -186,3 +211,47 @@ spdDown.config(width=8, height=1)  # button size
 
 win.mainloop()  # Execute the window
 
+
+# import tkinter as tk, threading
+# import imageio
+# import os
+# import time
+# from PIL import Image, ImageTk
+#
+# print (os.getcwd())
+#
+# video_name = "[TJ노래방] 사랑이었나봐 - 기리보이  TJ Karaoke"+".mp4" #This is your video file path
+# video = imageio.get_reader(video_name)
+#
+
+#
+#
+# if __name__ == "__main__":
+#
+#     root = tk.Tk()
+#     my_label = tk.Label(root)
+#     my_label.pack()
+#     my_label.place(x=50, y=50)
+#     thread = threading.Thread(target=stream, args=(my_label,))
+#     thread.daemon = 1
+#     thread.start()
+#     root.mainloop()
+
+import numpy as np
+import cv2
+import time
+
+# cap = cv2.VideoCapture('[TJ노래방] 사랑이었나봐 - 기리보이  TJ Karaoke.mp4')
+# i=0 #frame counter
+# frameTime = 1 # time of each frame in ms, you can add logic to change this value.
+# while(cap.isOpened()):
+#     ret = cap.grab() #grab frame
+#     i=i+1 #increment counter
+#     if i % 3 == 0: # display only one third of the frames, you can change this parameter according to your needs
+#         ret, frame = cap.retrieve() #decode frame
+#         cv2.imshow('frame',frame)
+#         if cv2.waitKey(100) & 0xFF == ord('q'):
+#             break
+#     #time.sleep(24)
+# cap.release()
+# cv2.destroyAllWindows()
