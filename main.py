@@ -152,17 +152,17 @@ start.place(x=800, y=600)
 start.config(width=8, height=1)  # button size
 start.config(command=startVideo)
 #
-def cancelMusic():
-    if thread.is_alive():
-        running_event.clear()
-        thread.join()
-
-    del(urlList[0])
-    del(musicList[0])
-    playList.delete('1.0', END)
-    for music in musicList:
-        playList.insert(END,music +"\n")
-    print(musicList)
+# def cancelMusic():
+#     if thread.is_alive():
+#         running_event.clear()
+#         thread.join()
+#
+#     del(urlList[0])
+#     del(musicList[0])
+#     playList.delete('1.0', END)
+#     for music in musicList:
+#         playList.insert(END,music +"\n")
+#     print(musicList)
 
 #cancel
 cancel = Button(win, text='취소', font = fixedSys25)  # construct a button
