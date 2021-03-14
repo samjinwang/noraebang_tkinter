@@ -1,286 +1,83 @@
+# Made by Tae-Hwan Kim
+# Codable Project Team
+# University of Illinois at Urbana Champaign
+# Title: Home Noraebang Player
+# main.py
+
 from tkinter import *
 from tkinter import font
-import pytube
+# import pytube
 import buttonMethod as bm
-import imageio
-from PIL import Image, ImageTk
-import os
-import time
-from threading import *
-
-# from PIL import ImageTk, Image
-# from pathlib import Path
-# from moviepy.editor import *
-# from moviepy.video.fx.resize import resize
-# import pygame
-
-urlList = []
-musicList = []
-
-################################
-# Call methods from buttonMethod
-################################
-# def uT():
-#     bm.urlType(urlEntry,musicList)
-
-
-################################
-# Application Window Settings
-################################
-
-win = Tk()  # construct a window
-
-# Window Setting
-win.geometry("1200x800")
-win.title("Home Noraebang")  # Title of the window
-fixedSys25 = font.Font(family ="FixedSys", size = 25)  # Font and Font size
-arial19 = font.Font(family ="Arial", size = 19)
-
-
-# 입력창(URL 입력)
-urlEntry = Entry(win,font = arial19, bd = 2)
-urlEntry.pack()
-urlEntry.place(x=800,y=40)
-
-
-
-
-
-
-
-
-# def urlType():
-#     url = urlEntry.get()  # a is the thing typed in the entry
-#     youtube = pytube.YouTube(url)
-#     video = youtube.streams.first()
-#     video.download()
-#     name = youtube.streams[0].title
-#     musicList.insert(END,name +"\n")
-
-    # print(str(Path().absolute()))
-
-#URL Label:
-var = StringVar()
-urlLabel = Label(win,font = font.Font(family ="Arial", size = 11), textvariable = var)
-var.set("Youtube URL:")
-urlLabel.pack()
-urlLabel.place(x=800, y=11)
-
-#Music List
-playList = Text(win, height = 22, width = 40)
-playList.pack()
-playList.place(x=800, y = 170)
-
-########### buttons ############
-
-def urlType():
-    url = urlEntry.get()  # a is the thing typed in the entry
-    urlList.append(url)
-    youtube = pytube.YouTube(url)
-    videoName = youtube.streams[0].title
-    newName = videoName.replace('/','')
-    musicList.append(newName)
-    playList.delete('1.0', END)
-    for music in musicList:
-        playList.insert(END,music +"\n")
-    print(musicList)
-
-#예약
-reserve = Button(win, text='예약', font = fixedSys25)  # construct a button
-reserve.pack()  # put a button on the window
-reserve.place(x=800, y=90)
-reserve.config(width=8, height=1)  # button size
-reserve.config(command= urlType)  # execute the function of reserve
-
-def urlTypeAhead():
-    url = urlEntry.get()  # a is the thing typed in the entry
-    urlList.insert(0, url)
-    youtube = pytube.YouTube(url)
-    videoName = youtube.streams[0].title
-    newName = videoName.replace('/','')
-    musicList.insert(0, newName)
-    playList.delete('1.0', END)
-    for music in musicList:
-        playList.insert(END,music +"\n")
-    print(musicList)
-
-#우선예약
-reserveAhead = Button(win, text='우선예약', font = fixedSys25)  # construct a button
-reserveAhead.pack()  # put a button on the window
-reserveAhead.place(x=1000, y=90)
-reserveAhead.config(width=8, height=1)  # button size
-reserveAhead.config(command=urlTypeAhead)  # execute the function of button
-
-
-
-
-def screenGenerator(label):
-    youtube = pytube.YouTube(urlList[0])
-    video = youtube.streams.first()
-    video.download()
-    videoname = musicList[0]+'.mp4'
-    downloadedVideo = imageio.get_reader(videoname)
-
-
-    for image in downloadedVideo.iter_data():
-        frame_image = ImageTk.PhotoImage(Image.fromarray(image))
-        label.config(image=frame_image)
-        label.image = frame_image
-        time.sleep(0.025)
-
-
-
-def startVideo():
-    videoLabel = Label(win)
-    videoLabel.pack()
-    videoLabel.place(x=50, y=50)
-    thread = Thread(target=screenGenerator,args=(videoLabel,))
-    thread.daemon = 1
-    thread.start()
-
-    playList.delete('1.0', END)
-    for i in range(1,len(musicList)):
-        playList.insert(END, musicList[i] + "\n")
-
-    # if thread.is_alive():
-
-
-# start
-start = Button(win,font = fixedSys25, text='시작')  # construct a button
-start.pack()  # put a button on the window
-start.place(x=800, y=600)
-start.config(width=8, height=1)  # button size
-start.config(command=startVideo)
-#
-# def cancelMusic():
-#     if thread.is_alive():
-#         running_event.clear()
-#         thread.join()
-#
-#     del(urlList[0])
-#     del(musicList[0])
-#     playList.delete('1.0', END)
-#     for music in musicList:
-#         playList.insert(END,music +"\n")
-#     print(musicList)
-
-#cancel
-cancel = Button(win, text='취소', font = fixedSys25)  # construct a button
-cancel.pack()  # put a button on the window
-cancel.place(x=1000, y=600)
-cancel.config(width=8, height=1)  # button size
-# cancel.config(command=cancelMusic)  # execute the function of button
-
-def cancelReservation():
-    del(urlList[0])
-    del(musicList[0])
-    playList.delete('1.0', END)
-    for music in musicList:
-        playList.insert(END,music +"\n")
-
-#cancel reservation
-cancelReserve = Button(win, text='예약취소', font = fixedSys25)  # construct a button
-cancelReserve.pack()  # put a button on the window
-cancelReserve.place(x=1000, y=680)
-cancelReserve.config(width=8, height=1)  # button size
-cancelReserve.config(command=cancelReservation)  # execute the function of button
-
-
-
-# # pause
-pause= Button(win,font = fixedSys25, text='일시정지')  # construct a button
-pause.pack()  # put a button on the window
-pause.place(x=800, y=680)
-pause.config(width=8, height=1)  # button size
-#reserve.config(command=urlType)  # execute the function of button
-
-
-# # pitch up
-pitchUP = Button(win,font = fixedSys25, text='#')  # construct a button
-pitchUP.pack()  # put a button on the window
-pitchUP.place(x=50, y=600)
-pitchUP.config(width=8, height=1)  # button size
-#reserve.config(command=urlType)  # execute the function of button
-
-# # pitch down
-pitchDown = Button(win,font = fixedSys25, text='♭')  # construct a button
-pitchDown.pack()  # put a button on the window
-pitchDown.place(x=50, y=680)
-pitchDown.config(width=8, height=1)  # button size
-#reserve.config(command=urlType)  # execute the function of button
-
-# # male pitch
-male = Button(win,font = fixedSys25, text='남자키')  # construct a button
-male.pack()  # put a button on the window
-male.place(x=230, y=600)
-male.config(width=8, height=1)  # button size
-#reserve.config(command=urlType)  # execute the function of button
-
-# # female pitch
-female = Button(win,font = fixedSys25, text='여자키')  # construct a button
-female.pack()  # put a button on the window
-female.place(x=230, y=680)
-female.config(width=8, height=1)  # button size
-#reserve.config(command=urlType)  # execute the function of button
-
-# # reverb up
-revUp = Button(win,font = fixedSys25, text='에코업')  # construct a button
-revUp.pack()  # put a button on the window
-revUp.place(x=410, y=600)
-revUp.config(width=8, height=1)  # button size
-#reserve.config(command=urlType)  # execute the function of button
-
-# # reverb down
-revDown = Button(win,font = fixedSys25, text='에코다운')  # construct a button
-revDown.pack()  # put a button on the window
-revDown.place(x=410, y=680)
-revDown.config(width=8, height=1)  # button size
-#reserve.config(command=urlType)  # execute the function of button
-#
-# #speed up
-spdUp= Button(win,font = fixedSys25, text='탬포업')  # construct a button
-spdUp.pack()  # put a button on the window
-spdUp.place(x=590, y=600)
-spdUp.config(width=8, height=1)  # button size
-#reserve.config(command=urlType)  # execute the function of button
-
-# #speed down
-spdDown = Button(win,font = fixedSys25, text='탬포다운')  # construct a button
-spdDown.pack()  # put a button on the window
-spdDown.place(x=590, y=680)
-spdDown.config(width=8, height=1)  # button size
-# #reserve.config(command=urlType)  # execute the function of button
-
-
-
-win.mainloop()  # Execute the window
-
-
-# import tkinter as tk
-# from threading import *
 # import imageio
+# from PIL import Image, ImageTk
 # import os
 # import time
-# from PIL import Image, ImageTk
+# from threading import *
+from appMaterials import *
 #
-# print (os.getcwd())
-#
-# video_name = "[TJ노래방] 사랑이었나봐 - 기리보이  TJ Karaoke.mp" #This is your video file path
-# video = imageio.get_reader(video_name)
-#
-# def stream(label):
-#
-#     for image in video.iter_data():
-#         frame_image = ImageTk.PhotoImage(Image.fromarray(image))
-#         label.config(image=frame_image)
-#         label.image = frame_image
-#
-# if __name__ == "__main__":
-#
-#     root = tk.Tk()
-#     my_label = tk.Label(root)
-#     my_label.pack()
-#     thread = Thread(target=stream, args=(my_label,))
-#     thread.daemon = 1
-#     thread.start()
-#     root.mainloop()
+# # from PIL import ImageTk, Image
+# # from pathlib import Path
+# # from moviepy.editor import *
+# # from moviepy.video.fx.resize import resize
+# # import pygame
+
+
+# ################################
+# # Call methods from buttonMethod
+# ################################
+def uT():
+    bm.urlType(urlEntry,playList)
+
+def uTAhead():
+    bm.urlTypeAhead(urlEntry,playList)
+
+def startVid():
+    bm.startvideo(win,playList)
+
+def cancelReserve():
+    bm.cancelReservation(playList)
+
+# ################################
+# # Application Window Settings
+# ################################
+win = AppWindow("1200x800","Home Noraebang").set() #Application window
+
+fixedSys25 = FontStyle("FixedSys",25).set() #Font for buttons
+arial19 = FontStyle("Arial",19).set() #Font for Url Type Entry box
+arial11 = FontStyle("Arial",11).set() #Font for the title above Url Entry
+
+urlLabel = Labels(win, "Youtube URL:",arial11,800,11) #Title above url Entry
+
+
+urlEntry = Entries(win, arial19, 800,40).set() #Entry where you type youtube URL
+
+
+playList = Lists(win,800,170,40,22).set() #The text box where you can see what songs have been reserved
+
+####### Buttons & Corresponding Methods #######
+reserve = Buttons(win,'예약',fixedSys25,800,90).set()
+reserve.config(command = uT)
+
+reserveAhead = Buttons(win,'우선예약',fixedSys25,1000,90).set()
+reserveAhead.config(command = uTAhead)
+
+cancel = Buttons(win,'취소',fixedSys25,1000,600).set()
+
+cancelReservation = Buttons(win,'예약취소',fixedSys25,1000,680).set()
+cancelReservation.config(command = cancelReserve)
+
+start = Buttons(win,'시작',fixedSys25,800,600).set()
+start.config(command = startVid)
+
+pause = Buttons(win,'일시정지',fixedSys25,800,680).set()
+pitchUP = Buttons(win,'#',fixedSys25,50,600).set()
+pitchDown = Buttons(win,'♭',fixedSys25,50,680).set()
+male = Buttons(win,'남자키',fixedSys25,230,600).set()
+female = Buttons(win,'여자키',fixedSys25,230,680).set()
+revUP = Buttons(win,'에코업',fixedSys25,410,600).set()
+revDown = Buttons(win,'에코다운',fixedSys25,410,680).set()
+spdUP = Buttons(win,'템포업',fixedSys25,590,600).set()
+spdDown = Buttons(win,'템포다운',fixedSys25,590,680).set()
+
+#Activate the application window
+win.mainloop()
