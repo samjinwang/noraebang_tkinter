@@ -51,6 +51,8 @@ class Buttons:
     :param y_coor: y coordinate of a button (int)
     :return: (type - tkinter.Button())
     """
+
+    #def __init__(self, application, buttonName, fontsytle, x_coor, y_coor,command =):
     def __init__(self,application,buttonName,fontsytle,x_coor,y_coor):
         self.application = application
         self.buttonName = buttonName

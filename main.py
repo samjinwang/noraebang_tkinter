@@ -31,11 +31,14 @@ def uT():
 def uTAhead():
     bm.urlTypeAhead(urlEntry,playList)
 
-def startVid():
-    bm.startvideo(win,playList)
+def startVideoButton():
+    bm.startVideo(win,playList)
 
 def cancelReserve():
-    bm.cancelReservation(playList)
+    bm.cancelReservation(win,playList)
+
+def cancelButton():
+    bm.cancelMusic()
 
 # ################################
 # # Application Window Settings
@@ -54,6 +57,7 @@ urlEntry = Entries(win, arial19, 800,40).set() #Entry where you type youtube URL
 
 playList = Lists(win,800,170,40,22).set() #The text box where you can see what songs have been reserved
 
+
 ####### Buttons & Corresponding Methods #######
 reserve = Buttons(win,'예약',fixedSys25,800,90).set()
 reserve.config(command = uT)
@@ -67,7 +71,7 @@ cancelReservation = Buttons(win,'예약취소',fixedSys25,1000,680).set()
 cancelReservation.config(command = cancelReserve)
 
 start = Buttons(win,'시작',fixedSys25,800,600).set()
-start.config(command = startVid)
+start.config(command = startVideoButton)
 
 pause = Buttons(win,'일시정지',fixedSys25,800,680).set()
 pitchUP = Buttons(win,'#',fixedSys25,50,600).set()
